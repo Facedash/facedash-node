@@ -66,19 +66,45 @@ app.get('/auth/facebook', function(req, res) {
     , "client_secret":  conf.client_secret
     , "code":           req.query.code
   }, function (err, facebookRes) {
+    //here as soon as we login in we gather user info
+    // graph.get('/me/', function(err, res) {
+    // // console.log('LoggedIn:',res);
+    // console.log(res);
+    // console.log(res.name);
+    // // var oneUser = res;
+    // // myDataRef.set({name: res.name, text: res.birthday});
+    // });
     res.redirect('/user');
   });
-
-
 });
 
 // user gets sent here after being authorized
+// app.get('/user', function(req, res) {
+//   graph.get('/me/', function(err, res) {
+//     var userLoggedIn = res;
+//       console.log('LoggedIn:',userLoggedIn);
+//       console.log('name:',userLoggedIn.name);
+//   });
+//   // console.log('LoggedIn:',userLoggedIn);
+//   res.render('user', { title: 'Welcome', name: res});
+// });
+
 app.get('/user', function(req, res) {
-    graph.get("/me/", function(err, res) {
-    console.log(res); // { image: true, location: "http://profile.ak.fb..." }
+  var oneUser = null;
+
+  graph.get('/me/', function(err, data) {
+    console.log('\n\n\nFrom Inside:',data);
+    var oneUser = data;
+    console.log('\n\n\nFromOutside:',oneUser);
+    res.render('user', { title: 'Welcome', name: oneUser.name });
+  });
+  
+  // console.log('LoggedIn:',oneUser);
+  // console.log('LoggedIn:',oneUser.name);
+  // res.render('user', { title: 'Welcome', name: oneUser.name });
+  // res.send();
 });
-  res.render("index", { title: "Logged In" });
-});
+
 
 ///////////////////////////////////////////////////////////////
 
@@ -117,6 +143,5 @@ app.set('port', process.env.PORT || 3000);
 var server = app.listen(app.get('port'), function() {
   // debug('Express server listening on port ' + server.address().port);
 });
-
 
 module.exports = app;

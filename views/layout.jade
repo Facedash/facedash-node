@@ -3,5 +3,8 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='https://cdn.firebase.com/v0/firebase.js')
   body
+    script.
+      var myDataRef = new Firebase('https://ewzxjjkj44h.firebaseio-demo.com/');
     block content
