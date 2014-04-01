@@ -13,7 +13,7 @@ var graph = require('fbgraph');
 var conf = {
     client_id:      '176524962546904'
   , client_secret:  '6e701a88b5a0f15b734e8cdc92abf5b9'
-  , scope:          'email, user_about_me, user_birthday, user_location, publish_stream'
+  , scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships'
   , redirect_uri:   'http://localhost:3000/auth/facebook'
 };
 
@@ -34,8 +34,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
-app.get('/', routes.index);
-app.get('/users', users.list);
+app.get('/', function(req, res){
+  res.render('index', { title: 'latif' });
+});
+// app.get('/users', users.list);
 
 
 // Fcaebook Routes //////////////////////////
@@ -92,11 +94,9 @@ app.get('/auth/facebook', function(req, res) {
 app.get('/user', function(req, res) {
   var oneUser = null;
 
-  graph.get('/me/', function(err, data) {
-    console.log('\n\n\nFrom Inside:',data);
-    var oneUser = data;
-    console.log('\n\n\nFromOutside:',oneUser);
-    res.render('user', { title: 'Welcome', name: oneUser.name });
+  graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender,interested_in,relationship_status,timezone,languages', function(err, data) {
+    console.log('\n\n\nFromOutside:',data);
+    res.render('user', { title: 'Welcome'});
   });
   
   // console.log('LoggedIn:',oneUser);
