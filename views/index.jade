@@ -1,6 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  <a href="/auth/facebook">Login</a>
+  .container
+      //
+         Main component for a primary marketing message or call to action 
+      .jumbotron
+        h1 Welcome To Facedashboard
+        p
+          | Login to find out about your friends and 
+        p
+          a.btn.btn-lg.btn-primary(href='/auth/facebook') Login »
