@@ -16,7 +16,7 @@ var conf = {
     client_id:      '176524962546904'
   , client_secret:  '6e701a88b5a0f15b734e8cdc92abf5b9'
   , scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships'
-  , redirect_uri:   'http://facedash.azurewebsites.net/auth/facebook'
+  , redirect_uri:   'http://localhost:3000/auth/facebook'
 };
 
 var routes = require('./routes');
@@ -96,12 +96,16 @@ app.get('/auth/facebook', function(req, res) {
 app.get('/user', function(req, res) {
   var userLocation = null;
   var userHometown = null;
+  var userLocationName = null;
+  var userHometownName = null;
 
   graph.get('/me/', function(err, data) {
     console.log('User Data:',data);
     // console.log('User Data:',data.location);
     userLocation = data.location;
     userHometown = data.hometown;
+    userHometownName = underscore.values(userHometown)[1];
+    userLocationName = underscore.values(userLocation)[1];
   });
 
   var friendsCount = null;
@@ -124,8 +128,14 @@ app.get('/user', function(req, res) {
       return item.gender === 'male' ? 'male': 'female';
     });
 
+    var otherGenderCount = friendsCount - (genderCount.male + genderCount.female);
+    console.log('CustomGender:',otherGenderCount);
+
+    var otherGenderPerc = Math.floor((otherGenderCount/friendsCount)*100);
+
     var malePerc = Math.floor((genderCount.male/friendsCount)*100);
-    var femalePerc = 100 - malePerc;
+    var otherGenderPerc = Math.floor((otherGenderCount/friendsCount)*100);
+    var femalePerc = 100 - malePerc - otherGenderPerc;
     // console.log('genderCount;',genderCount);
     /////////////////////////////////////////////////////////////////////////////
     
@@ -237,7 +247,7 @@ app.get('/user', function(req, res) {
     // console.log('User Location:',userLocation);
     // console.log('User hometown:',userHometown);
     
-    res.render('user', { title: 'Welcome', friendsCount: friendsCount, maleCount: genderCount.male, malePerc: malePerc, femaleCount: genderCount.female, femalePerc: femalePerc, averageAge: averageAge, averageAgeAccuracy: averageAgeAccuracy, sameLocationCount: sameLocationCount,sameLocationPerc: sameLocationPerc, sameLocationAccuracy: sameLocationAccuracy, sameHometownCount: sameHometownCount,sameHometownPerc: sameHometownPerc, sameHometownAccuracy: sameHometownAccuracy, single: single, inArelationship: inArelationship, engaged: engaged, married: married, civilUnion: civilUnion, domesticPartnership: domesticPartnership, openRelationship: openRelationship, complicated: complicated, separated: separated, divorced: divorced, widowed: widowed, singlePerc: singlePerc, inArelationshipPerc: inArelationshipPerc, engagedPerc: engagedPerc, marriedPerc: marriedPerc, civilUnionPerc: civilUnionPerc, domesticPartnershipPerc: domesticPartnershipPerc, openRelationshipPerc: openRelationshipPerc, complicatedPerc: complicatedPerc, separatedPerc: separatedPerc, divorcedPerc: divorcedPerc, widowedPerc: widowedPerc, friendsRstatusAccuracy: friendsRstatusAccuracy});
+    res.render('user', { friendsCount: friendsCount, userLocationName: userLocationName, userHometownName: userHometownName, otherGenderCount: otherGenderCount, otherGenderPerc: otherGenderPerc, maleCount: genderCount.male, malePerc: malePerc, femaleCount: genderCount.female, femalePerc: femalePerc, averageAge: averageAge, averageAgeAccuracy: averageAgeAccuracy, sameLocationCount: sameLocationCount,sameLocationPerc: sameLocationPerc, sameLocationAccuracy: sameLocationAccuracy, sameHometownCount: sameHometownCount,sameHometownPerc: sameHometownPerc, sameHometownAccuracy: sameHometownAccuracy, single: single, inArelationship: inArelationship, engaged: engaged, married: married, civilUnion: civilUnion, domesticPartnership: domesticPartnership, openRelationship: openRelationship, complicated: complicated, separated: separated, divorced: divorced, widowed: widowed, singlePerc: singlePerc, inArelationshipPerc: inArelationshipPerc, engagedPerc: engagedPerc, marriedPerc: marriedPerc, civilUnionPerc: civilUnionPerc, domesticPartnershipPerc: domesticPartnershipPerc, openRelationshipPerc: openRelationshipPerc, complicatedPerc: complicatedPerc, separatedPerc: separatedPerc, divorcedPerc: divorcedPerc, widowedPerc: widowedPerc, friendsRstatusAccuracy: friendsRstatusAccuracy});
   });
 });
 

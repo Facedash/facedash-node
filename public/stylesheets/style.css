@@ -1,6 +1,8 @@
 body{
-  background-color: #e7e7e7;
+  /*background: url('/public/images/withey.png') 0 0 #e7e7e7;*/
+  background: #e7e7e7 url('../public/images/withey.png') repeat right top;
 }
+
 .big{
   font-size: 70px;
   text-align: center;
@@ -16,11 +18,21 @@ body{
   background-color: transparent;
 }
 
+.list-group, .badge{
+  font-size: 14px;
+}
+
 .label-default{
   background-color: transparent;
   color: #fff;
+  font-weight: bold;
 }
 
 h3{
   font-weight: bold;
+}
+
+.jumbotron{
+  background-color: transparent;
+  text-align: center;
 }
