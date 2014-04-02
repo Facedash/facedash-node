@@ -36,3 +36,12 @@ h3{
   background-color: transparent;
   text-align: center;
 }
+
+#foo{
+      position: absolute;
+      height: 0%;
+      width: 0%;
+      top: 50%;
+      left: 50%;
+      background-color: #e7e7e7;
+    }

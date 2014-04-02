@@ -1,5 +1,7 @@
 extends layout
 block content
+  script
+
   .container
       .page-header
         h1 Facedash
@@ -108,3 +110,4 @@ block content
       var ctx = document.getElementById("myChart").getContext("2d");
       var data = [{value: #{femaleCount},color:"#e7e7e7"},{value : #{maleCount},color : "#E0E4CC"},{value : #{otherGenderCount},color : "#eeeeee"}]
       new Chart(ctx).Pie(data);
+      spinner.stop()
