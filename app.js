@@ -13,10 +13,10 @@ var graph = require('fbgraph');
 // this should really be in a config file!
 // facebook configuration file
 var conf = {
-    client_id:      '176524962546904'
-  , client_secret:  '6e701a88b5a0f15b734e8cdc92abf5b9'
+    client_id:      '1435123560061520'
+  , client_secret:  'bb75ffb2201da17becf3bf8fe0376be6'
   , scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships'
-  , redirect_uri:   'http://facedash.azurewebsites.net/auth/facebook'
+  , redirect_uri:   'http://localhost:3000/auth/facebook'
 };
 
 var routes = require('./routes');
@@ -100,7 +100,7 @@ app.get('/user', function(req, res) {
   var userHometownName = null;
 
   graph.get('/me/', function(err, data) {
-    console.log('User Data:',data);
+    // console.log('User Data:',data);
     // console.log('User Data:',data.location);
     userLocation = data.location;
     userHometown = data.hometown;
@@ -111,9 +111,18 @@ app.get('/user', function(req, res) {
   var friendsCount = null;
 
   // graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender', function(err, data) {
-  graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender,interested_in,relationship_status,timezone,languages', function(err, data) {
+  graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender,interested_in,relationship_status,timezone,languages&maxlimit&offset=0', function(err, data) {
     // console.log('\n\n\nFromOutside:',data);
-    
+    console.log('\n\n\n\n\n\n');
+    if(data.paging && data.paging.next) {
+        var nextPage = data.paging.next.slice(26)
+        graph.get(nextPage, function(err, nextData) {
+            // page 2
+            console.log('\n\n\nnext page');
+            console.log('\nnext Data',nextData);
+        });
+    }
+
     // console.log(data.data);
     var friendsIds = underscore.pluck(data.data, 'id');
     var friendsCount = friendsIds.length;
@@ -165,10 +174,14 @@ app.get('/user', function(req, res) {
 
 
     var friendsLocations = underscore.compact(underscore.pluck(data.data, 'location'));
+    console.log('friendsLocations:',friendsLocations);
+    
     var friendsLocationsCount = friendsLocations.length;
+    console.log('friendsLocationsCount:',friendsLocationsCount);
     var sameLocation = underscore.where(friendsLocations, userLocation);
 
     var sameLocationCount = sameLocation.length;
+    console.log('sameLocationCount:',sameLocationCount);
     var sameLocationPerc = Math.floor((sameLocationCount/friendsLocationsCount)*100);
     var sameLocationAccuracy = Math.floor((friendsLocationsCount/friendsCount)*100);
 
