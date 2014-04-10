@@ -1,8 +1,7 @@
 /* GET users listing. */
 var graph = require('fbgraph');
 var _ = require('underscore');
-exports.list = function(req, res)
-{
+exports.list = function(req, res){
   var userLocation = null;
   var userHometown = null;
   var userLocationName = null;
