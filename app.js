@@ -5,7 +5,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var underscore = require('underscore');
+var _ = require('underscore');
 // added the fbGraph module here
 var graph = require('fbgraph');
 
@@ -70,28 +70,9 @@ app.get('/auth/facebook', function(req, res) {
     , "client_secret":  conf.client_secret
     , "code":           req.query.code
   }, function (err, facebookRes) {
-    //here as soon as we login in we gather user info
-    // graph.get('/me/', function(err, res) {
-    // // console.log('LoggedIn:',res);
-    // console.log(res);
-    // console.log(res.name);
-    // // var oneUser = res;
-    // // myDataRef.set({name: res.name, text: res.birthday});
-    // });
     res.redirect('/user');
   });
 });
-
-// user gets sent here after being authorized
-// app.get('/user', function(req, res) {
-//   graph.get('/me/', function(err, res) {
-//     var userLoggedIn = res;
-//       console.log('LoggedIn:',userLoggedIn);
-//       console.log('name:',userLoggedIn.name);
-//   });
-//   // console.log('LoggedIn:',userLoggedIn);
-//   res.render('user', { title: 'Welcome', name: res});
-// });
 
 app.get('/user', function(req, res) {
   var userLocation = null;
@@ -104,8 +85,8 @@ app.get('/user', function(req, res) {
     // console.log('User Data:',data.location);
     userLocation = data.location;
     userHometown = data.hometown;
-    userHometownName = underscore.values(userHometown)[1];
-    userLocationName = underscore.values(userLocation)[1];
+    userHometownName = _.values(userHometown)[1];
+    userLocationName = _.values(userLocation)[1];
   });
 
   var friendsCount = null;
@@ -123,8 +104,15 @@ app.get('/user', function(req, res) {
         });
     }
 
-    // console.log(data.data);
-    var friendsIds = underscore.pluck(data.data, 'id');
+    console.log('Data:',data.data);
+    var num = 1; 
+    
+    _.each(data.data, function(item){
+        console.log(num++, item.name, item.relationship_status);
+    });
+
+
+    var friendsIds = _.pluck(data.data, 'id');
     var friendsCount = friendsIds.length;
     console.log('FriendsCount:',friendsCount);
 
@@ -133,12 +121,12 @@ app.get('/user', function(req, res) {
     // console.log('Count:', friendsCount);
 
     // Gender Count returns an object {female: ??, male: ??}
-    var genderCount = underscore.countBy(data.data, function(item) {
+    var genderCount = _.countBy(data.data, function(item) {
       return item.gender === 'male' ? 'male': 'female';
     });
 
     var otherGenderCount = friendsCount - (genderCount.male + genderCount.female);
-    console.log('CustomGender:',otherGenderCount);
+    // console.log('CustomGender:',otherGenderCount);
 
     var otherGenderPerc = Math.floor((otherGenderCount/friendsCount)*100);
 
@@ -148,17 +136,17 @@ app.get('/user', function(req, res) {
     // console.log('genderCount;',genderCount);
     /////////////////////////////////////////////////////////////////////////////
     
-    var birthdays = underscore.compact(underscore.pluck(data.data, 'birthday'));
-    // var validBirthdays = underscore.compact(birthdays)
-    var trimmedBirthdays = underscore.reject(birthdays, function(item){
+    var birthdays = _.compact(_.pluck(data.data, 'birthday'));
+    // var validBirthdays = _.compact(birthdays)
+    var trimmedBirthdays = _.reject(birthdays, function(item){
       return item.length <= 5;
     });
 
-    var years = underscore.map(trimmedBirthdays, function(item){
+    var years = _.map(trimmedBirthdays, function(item){
       return parseInt(item.substr(-4));
     });
 
-    var sum = underscore.reduce(years, function(memo, num){ return memo + num; }, 0);
+    var sum = _.reduce(years, function(memo, num){ return memo + num; }, 0);
 
     var d = new Date();
     var n = d.getFullYear();
@@ -166,50 +154,50 @@ app.get('/user', function(req, res) {
     var averageAge = n - Math.floor(sum/years.length);
     var averageAgeAccuracy = Math.floor((years.length/friendsCount)*100);
 
-    console.log('averageAge:', averageAge);
-    console.log('Accuracy age:', averageAgeAccuracy + '%');
+    // console.log('averageAge:', averageAge);
+    // console.log('Accuracy age:', averageAgeAccuracy + '%');
     
 
     /////////////////////////////////////////////////////////////////////////////
 
 
-    var friendsLocations = underscore.compact(underscore.pluck(data.data, 'location'));
-    console.log('friendsLocations:',friendsLocations);
+    var friendsLocations = _.compact(_.pluck(data.data, 'location'));
+    // console.log('friendsLocations:',friendsLocations);
     
     var friendsLocationsCount = friendsLocations.length;
-    console.log('friendsLocationsCount:',friendsLocationsCount);
-    var sameLocation = underscore.where(friendsLocations, userLocation);
+    // console.log('friendsLocationsCount:',friendsLocationsCount);
+    var sameLocation = _.where(friendsLocations, userLocation);
 
     var sameLocationCount = sameLocation.length;
-    console.log('sameLocationCount:',sameLocationCount);
+    // console.log('sameLocationCount:',sameLocationCount);
     var sameLocationPerc = Math.floor((sameLocationCount/friendsLocationsCount)*100);
     var sameLocationAccuracy = Math.floor((friendsLocationsCount/friendsCount)*100);
 
     // console.log(sameLocation);
-    console.log('same Location Perc:', sameLocationPerc);
-    console.log('sameLocation Accuracy:', sameLocationAccuracy);
+    // console.log('same Location Perc:', sameLocationPerc);
+    // console.log('sameLocation Accuracy:', sameLocationAccuracy);
 
     /////////////////////////////////////////////////////////////////////////////
 
-    var friendsHometowns = underscore.compact(underscore.pluck(data.data, 'hometown'));
+    var friendsHometowns = _.compact(_.pluck(data.data, 'hometown'));
     var friendsHometownsCount = friendsHometowns.length;
-    var sameHometown = underscore.where(friendsHometowns, userHometown);
+    var sameHometown = _.where(friendsHometowns, userHometown);
 
     var sameHometownCount = sameHometown.length;
     var sameHometownPerc = Math.floor((sameHometownCount/friendsHometownsCount)*100);
     var sameHometownAccuracy = Math.floor((friendsHometownsCount/friendsCount)*100);
 
-    console.log('same Hometown Perc:',sameHometownPerc);
-    console.log('sameHometown Accuracy:',sameHometownAccuracy);
+    // console.log('same Hometown Perc:',sameHometownPerc);
+    // console.log('sameHometown Accuracy:',sameHometownAccuracy);
 
 
     /////////////////////////////////////////////////////////////////////////////
-    var friendsRstatus = underscore.compact(underscore.pluck(data.data, 'relationship_status'));
+    var friendsRstatus = _.compact(_.pluck(data.data, 'relationship_status'));
     
     // console.log('friendsRStatus Count:',friendsRstatus.length);
 
     var status = {};
-    var friendsRstatusCount = underscore.each(friendsRstatus, function(item){
+    var friendsRstatusCount = _.each(friendsRstatus, function(item){
       (!status[item]) ? status[item] = 1 : status[item]++;
     });
     // console.log(status);
@@ -242,9 +230,9 @@ app.get('/user', function(req, res) {
     
     var friendsRstatusCount = friendsRstatus.length;
     var friendsRstatusAccuracy = Math.floor((friendsRstatusCount/friendsCount) * 100);
-    console.log('friendsCount: ',friendsCount);
-    console.log('friendsRstatusCount: ',friendsRstatusCount);
-    console.log('friendsRstatusAccuracy: ',friendsRstatusAccuracy);
+    // console.log('friendsCount: ',friendsCount);
+    // console.log('friendsRstatusCount: ',friendsRstatusCount);
+    // console.log('friendsRstatusAccuracy: ',friendsRstatusAccuracy);
 
     // console.log('SingleFriends:',singlePerc);
     // console.log('In a relationship:',inArelationshipPerc);
