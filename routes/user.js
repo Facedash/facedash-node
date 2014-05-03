@@ -159,6 +159,55 @@ exports.info = function(req, res) {
     // console.log('User Location:',userLocation);
     // console.log('User hometown:',userHometown);
     
-    res.render('user', { friendsCount: friendsCount, userLocationName: userLocationName, userHometownName: userHometownName, otherGenderCount: otherGenderCount, otherGenderPerc: otherGenderPerc, maleCount: genderCount.male, malePerc: malePerc, femaleCount: genderCount.female, femalePerc: femalePerc, averageAge: averageAge, averageAgeAccuracy: averageAgeAccuracy, sameLocationCount: sameLocationCount,sameLocationPerc: sameLocationPerc, sameLocationAccuracy: sameLocationAccuracy, sameHometownCount: sameHometownCount,sameHometownPerc: sameHometownPerc, sameHometownAccuracy: sameHometownAccuracy, single: single, inArelationship: inArelationship, engaged: engaged, married: married, civilUnion: civilUnion, domesticPartnership: domesticPartnership, openRelationship: openRelationship, complicated: complicated, separated: separated, divorced: divorced, widowed: widowed, singlePerc: singlePerc, inArelationshipPerc: inArelationshipPerc, engagedPerc: engagedPerc, marriedPerc: marriedPerc, civilUnionPerc: civilUnionPerc, domesticPartnershipPerc: domesticPartnershipPerc, openRelationshipPerc: openRelationshipPerc, complicatedPerc: complicatedPerc, separatedPerc: separatedPerc, divorcedPerc: divorcedPerc, widowedPerc: widowedPerc, friendsRstatusAccuracy: friendsRstatusAccuracy});
+    // res.render('user', { friendsCount: friendsCount, userLocationName: userLocationName, userHometownName: userHometownName, otherGenderCount: otherGenderCount, otherGenderPerc: otherGenderPerc, maleCount: genderCount.male, malePerc: malePerc, femaleCount: genderCount.female, femalePerc: femalePerc, averageAge: averageAge, averageAgeAccuracy: averageAgeAccuracy, sameLocationCount: sameLocationCount,sameLocationPerc: sameLocationPerc, sameLocationAccuracy: sameLocationAccuracy, sameHometownCount: sameHometownCount,sameHometownPerc: sameHometownPerc, sameHometownAccuracy: sameHometownAccuracy, single: single, inArelationship: inArelationship, engaged: engaged, married: married, civilUnion: civilUnion, domesticPartnership: domesticPartnership, openRelationship: openRelationship, complicated: complicated, separated: separated, divorced: divorced, widowed: widowed, singlePerc: singlePerc, inArelationshipPerc: inArelationshipPerc, engagedPerc: engagedPerc, marriedPerc: marriedPerc, civilUnionPerc: civilUnionPerc, domesticPartnershipPerc: domesticPartnershipPerc, openRelationshipPerc: openRelationshipPerc, complicatedPerc: complicatedPerc, separatedPerc: separatedPerc, divorcedPerc: divorcedPerc, widowedPerc: widowedPerc, friendsRstatusAccuracy: friendsRstatusAccuracy});
+    res.send({  information: {
+                  friendsNumber: friendsCount,
+                  userLocationName: userLocationName,
+                  userHometownName: userHometownName,
+                  averageAge: averageAge
+                },
+                counts: {
+                  otherGender: otherGenderCount,
+                  male: genderCount.male,
+                  female: genderCount.female,
+                  sameLocation: sameLocationCount,
+                  sameHometown: sameHometownCount,
+                  single: single,
+                  inArelationship: inArelationship,
+                  engaged: engaged,
+                  married: married,
+                  civilUnion: civilUnion,
+                  domesticPartnership: domesticPartnership,
+                  openRelationship: openRelationship,
+                  complicated: complicated,
+                  separated: separated,
+                  divorced: divorced,
+                  widowed: widowed
+                },
+                percentage: {
+                  otherGender: otherGenderPerc,
+                  male: malePerc,
+                  female: femalePerc,
+                  sameLocation: sameLocationPerc,
+                  sameHometown: sameHometownPerc,
+                  single: singlePerc,
+                  inArelationship: inArelationshipPerc,
+                  engaged: engagedPerc,
+                  married: marriedPerc,
+                  civilUnion: civilUnionPerc,
+                  domesticPartnership: domesticPartnershipPerc,
+                  openRelationship: openRelationshipPerc,
+                  complicated: complicatedPerc,
+                  separated: separatedPerc,
+                  divorced: divorcedPerc,
+                  widowed: widowedPerc
+                },
+                accuracy:{
+                  averageAge: averageAgeAccuracy,
+                  sameLocation: sameLocationAccuracy,
+                  sameHometown: sameHometownAccuracy,
+                  friendsRstatus: friendsRstatusAccuracy
+                }
+              });
   });
 };
