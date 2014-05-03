@@ -13,10 +13,11 @@ var graph = require('fbgraph');
 // this should really be in a config file!
 // facebook configuration file
 var conf = {
-    client_id:      '176524962546904'
-  , client_secret:  '6e701a88b5a0f15b734e8cdc92abf5b9'
-  , scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships'
-  , redirect_uri:   'http://facedash.azurewebsites.net/auth/facebook'
+    client_id:      process.env.APP_ID || 'YOUR-API-ID',
+    client_secret:  process.env.APP_SECRET || 'YOUR-API-SECRET',
+    scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships',
+    redirect_uri:   'http://localhost:3000/auth/facebook'
+    // redirect_uri:   'http://'YOUR PRODUCTION URL'/auth/facebook'
 };
 
 var routes = require('./routes');
@@ -39,10 +40,8 @@ app.use(app.router);
 app.get('/', function(req, res){
   res.render('index', { title: 'latif' });
 });
-// app.get('/users', users.list);
 
-
-// Fcaebook Routes //////////////////////////
+// Facebook Routes //////////////////////////
 app.get('/auth/facebook', function(req, res) {
 
   // we don't have a code yet
@@ -70,28 +69,10 @@ app.get('/auth/facebook', function(req, res) {
     , "client_secret":  conf.client_secret
     , "code":           req.query.code
   }, function (err, facebookRes) {
-    //here as soon as we login in we gather user info
-    // graph.get('/me/', function(err, res) {
-    // // console.log('LoggedIn:',res);
-    // console.log(res);
-    // console.log(res.name);
-    // // var oneUser = res;
-    // // myDataRef.set({name: res.name, text: res.birthday});
-    // });
+    // We redirect to /user 
     res.redirect('/user');
   });
 });
-
-// user gets sent here after being authorized
-// app.get('/user', function(req, res) {
-//   graph.get('/me/', function(err, res) {
-//     var userLoggedIn = res;
-//       console.log('LoggedIn:',userLoggedIn);
-//       console.log('name:',userLoggedIn.name);
-//   });
-//   // console.log('LoggedIn:',userLoggedIn);
-//   res.render('user', { title: 'Welcome', name: res});
-// });
 
 app.get('/user', function(req, res) {
   var userLocation = null;
@@ -287,7 +268,7 @@ app.use(function(err, req, res, next) {
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
-  // debug('Express server listening on port ' + server.address().port);
+    console.log('Express server listening on port ' + server.address().port)
 });
 
 module.exports = app;
