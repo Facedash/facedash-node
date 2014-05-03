@@ -33,7 +33,7 @@ Just fetch the changes and merge them into your project with git.
 ## Directory Layout
 This is still a basic node/expres app. Expect a basic out of the box express app folder structure.
 The visual board and login are still express templates.
-A backbone client is on progress
+A backbone client is in progress
 
 ## Example App
 
