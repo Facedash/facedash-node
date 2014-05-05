@@ -25,6 +25,7 @@ var conf = {
 
 var routes = require('./routes');
 var users = require('./routes/user');
+var profile = require('./routes/profile');
 
 var app = express();
 
@@ -51,6 +52,7 @@ app.get('/', routes.index);
 /**
  * User 
  */
+app.get('/profile', profile.info);
 app.get('/auth/facebook', function(req, res) {
 
   // we don't have a code yet

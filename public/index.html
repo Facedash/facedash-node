@@ -29,7 +29,7 @@
     <script type="text/template" id="user-content">      
       <div class="page-header">
         <h1>Facedash</h1>
-        <p class="lead">Start Analysing your Data Here<a class="pull-right btn btn-primary" href="/auth/facebook">Refresh</a></p>
+        <p class="lead">Start Analysing your Data Here<a class="pull-right btn btn-primary" href="/auth/facebook">Refresh</a><a class="pull-right btn btn-primary" href="/#/profile">Profile</a></p>
       </div>
 
       <div class="row">
@@ -163,6 +163,17 @@
       </div>
     </script>
     
+    <!-- UserProfile View Template -->
+    <script type="text/template" id="profile-content">
+      <div class="page-header">
+        <h1>Profile</h1>
+        <a href="/#/user" class="btn btn-primary">Back</a>
+      </div>
+      <% _.each(user, function(value, key){ %>
+      <p><%= key %>: <%= value %></p>
+      <% }); %>
+    </script>
+
     <script>
     var HomeView = Backbone.View.extend({
       el: '.page',
@@ -174,6 +185,25 @@
 
     var UserModel = Backbone.Model.extend({
       urlRoot: '/user'
+    });
+
+    var UserProfileModel = Backbone.Model.extend({
+      urlRoot: '/profile'
+    });
+
+    var UserProfileView = Backbone.View.extend({
+      el: '.page',
+      render: function(){
+        var that = this;
+        var userProfile = new UserProfileModel();
+        userProfile.fetch({
+          success :function(){
+            var template = _.template($('#profile-content').html(), {user: userProfile.toJSON() });
+            that.$el.html(template);
+            console.log('USERProfile:',userProfile.toJSON());
+          }
+        });
+      }
     });
 
     var UserView = Backbone.View.extend({
@@ -193,11 +223,13 @@
 
     var homeView = new HomeView();
     var userView = new UserView();
+    var userProfileView = new UserProfileView();
 
     var Router = Backbone.Router.extend({
       routes :{
         '' : 'home', 
-        'user' : 'info'
+        'user' : 'info',
+        'profile': 'userprofile'
       }
     });
     
@@ -209,6 +241,10 @@
 
     router.on('route:info', function(){
       userView.render();
+    });
+
+    router.on('route:userprofile', function(){
+      userProfileView.render();
     });
 
     Backbone.history.start();
