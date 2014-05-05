@@ -1,6 +1,6 @@
 # Facedash: Dashboard for Social Metrics
 
-This is a simple example on how you could turn information from your facebook account into interesting and dynamic metric.
+This is a simple example on how you could turn information from your facebook account into interesting and dynamic metrics.
 
 ## How to use facedash
 
@@ -30,14 +30,17 @@ Coming soon!
 
 Just fetch the changes and merge them into your project with git.
 
-## Directory Layout
-This is still a basic node/expres app. Expect a basic out of the box express app folder structure.
-The visual board and login are still express templates.
-A backbone client is in progress
+## App Structure
+The Server:
+- Node/expres.
+- Expect a basic out of the box express app folder structure.
+
+The Client:
+- A simple Backbone client.
 
 ## Example App
 
-A simple [blog](http://facedash.azurewebsites.net) based on this repo.
+A simple [Example](http://facedash.azurewebsites.net) based on this repo.
 
 
 ## Contact
