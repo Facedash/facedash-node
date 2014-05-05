@@ -43,13 +43,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
-
 /**
  * General.
  */
-app.get('/', function(req, res){
-  res.render('index', { title: 'latif' });
-});
+app.get('/', routes.index);
 
 /**
  * User 
@@ -82,7 +79,7 @@ app.get('/auth/facebook', function(req, res) {
     , "code":           req.query.code
   }, function (err, facebookRes) {
     // We redirect to /user 
-    res.redirect('/user');
+    res.redirect('/#/user');
   });
 });
 

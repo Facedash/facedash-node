@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title Page</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Title</h1>
+      <div class="page"></div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    
+    <script type="text/template" id="content">
+      <h2>Template</h2>
+      <%= user.get('name') %>
+    </script>
+    
+    <script>
+    var UserView = Backbone.View.extend({
+      el: '.page',
+      render: function(){
+        var template = _.template($('#content').html(), { user: { name: 'hello'} });
+        this.$el.render(template);
+      };
+    });
+
+    var userView = new UserView();
+
+    var Router = Backbone.Router.extend({
+      routes :{
+        '' : 'home'
+      }
+    });
+
+    
+    var router = new Router();
+
+    router.on('routes:home', function(){
+      userView.render();
+    });
+
+    Backbone.history.start();
+    </script>
+  </body>
+</html>

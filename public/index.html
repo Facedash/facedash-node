@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Facedash</title>
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="page"></div>
+    </div>
+    <div id="foo">
+
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/Chart.js/0.2.0/Chart.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min.js"></script>
+    <script src="/javascripts/spinner.js"></script>
+    
+
+    <!-- User View Template-->
+    <script type="text/template" id="user-content">      
+      <div class="page-header">
+        <h1>Facedash</h1>
+        <p class="lead">Start Analysing your Data Here<a class="pull-right btn btn-primary" href="/auth/facebook">Refresh</a></p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Friends Count</h3>
+          <p class="big"><%= information.friendsNumber %></p>
+        </div>
+
+        <div class="col-md-6">
+          <h3>Average Age<span class="label label-default"><%= accuracy.averageAge %>%</span></h3>
+          <p class="big"><%= information.averageAge %></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Location<span class="label label-default"><%= accuracy.sameLocation %>%</span></h3>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%= counts.sameLocation %></span>
+              <span class="badge"><%= percentage.sameLocation %>%</span><%= information.location %>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h3>Hometown<span class="label label-default"><%= accuracy.sameHometown %>%</span></h3>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%= counts.sameHometown %></span>
+              <span class="badge"><%= percentage.sameHometown %>%</span><%= information.hometown %>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Ratio</h3>
+          <canvas height="300" id="myChart" style="width: 300px; height: 300px;" width="300"></canvas>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%= counts.male %></span>
+              <span class="badge"><%= percentage.male %>%</span>Male Count
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.female %></span>
+              <span class="badge"><%= percentage.female %>%</span>Female Count
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.otherGender %></span>
+              <span class="badge"><%= percentage.otherGender %>%</span>Other Count
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-6">
+          <h3>Relationship Status<span class="label label-default"><%= accuracy.friendsRstatus %>%</span></h3>
+
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="badge"><%= counts.single %></span>
+              <span class="badge"><%= percentage.single %>%</span>Single
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.inArelationship %></span>
+              <span class="badge"><%= percentage.inArelationship %>%</span>In a Relationship
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.engaged %></span>
+              <span class="badge"><%= percentage.engaged %>%</span>Engaged
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.married %></span>
+              <span class="badge"><%= percentage.married %>%</span>Married
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.civilUnion %></span>
+              <span class="badge"><%= percentage.civilUnion %>%</span>In a civil Union
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.domesticPartnership %></span>
+              <span class="badge"><%= percentage.domesticPartnership %>%</span>In a domestic partnership
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.openRelationship %></span>
+              <span class="badge"><%= percentage.openRelationship %>%</span>In an open relationship
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.complicated %></span>
+              <span class="badge"><%= percentage.complicated %>%</span>Its complicated
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.separated %></span>
+              <span class="badge"><%= percentage.separated %>%</span>Separated
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.divorced %></span>
+              <span class="badge"><%= percentage.divorced %>%</span>Divorced
+            </li>
+
+            <li class="list-group-item">
+              <span class="badge"><%= counts.widowed %></span>
+              <span class="badge"><%= percentage.widowed %>%</span>Widowed
+            </li>
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <!--  Home View Template -->
+    <script type="text/template" id="home-content">
+      <div class="jumbotron">
+        <h1>Welcome to<br><i class="fa fa-facebook"></i>acedash</h1>
+        <p>Login to find out about YOU and YOUR friends</p>
+        <a href="/auth/facebook" class="btn btn-primary"><%= button.text %></a>
+      </div>
+    </script>
+    
+    <script>
+    var HomeView = Backbone.View.extend({
+      el: '.page',
+      render: function(){
+        var template = _.template($('#home-content').html(), { button: { text: 'Login' } });
+        this.$el.html(template);
+      }
+    })
+
+    var UserModel = Backbone.Model.extend({
+      urlRoot: '/user'
+    });
+
+    var UserView = Backbone.View.extend({
+      el: '.page',
+      render: function(){
+        var that = this;
+        var user = new UserModel();
+        user.fetch({
+          success :function(){
+            var template = _.template($('#user-content').html(), user.toJSON());
+            that.$el.html(template);
+            console.log('USER:',user.toJSON());
+          }
+        });
+      }
+    });
+
+    var homeView = new HomeView();
+    var userView = new UserView();
+
+    var Router = Backbone.Router.extend({
+      routes :{
+        '' : 'home', 
+        'user' : 'info'
+      }
+    });
+    
+    var router = new Router();
+
+    router.on('route:home', function(){
+      homeView.render();
+    });
+
+    router.on('route:info', function(){
+      userView.render();
+    });
+
+    Backbone.history.start();
+    </script>
+  </body>
+</html>

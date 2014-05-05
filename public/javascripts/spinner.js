@@ -23,14 +23,7 @@ $(document).ready(function() {
  
   $(".btn").on('click', function(e) {
     // e.preventDefault();
-        target.style.opacity = 1
-      spinner = new Spinner(opts).spin(target);
-      
+    target.style.opacity = 1;
+    spinner = new Spinner(opts).spin(target);
   });
-
-  // $("#button2").on('click', function(e) {
-  //   e.preventDefault();
-  //   spinner.stop(spinner_div);
-  // });
- 
-    });
+});
