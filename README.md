@@ -30,7 +30,7 @@ Coming soon!
 
 Just fetch the changes and merge them into your project with git.
 
-## Directory Layout
+## App Structure
 The Server:
 - Node/expres.
 - Expect a basic out of the box express app folder structure.
