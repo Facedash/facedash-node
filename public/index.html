@@ -95,60 +95,12 @@
           <h3>Relationship Status<span class="label label-default"><%= accuracy.friendsRstatus %>%</span></h3>
 
           <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge"><%= counts.single %></span>
-              <span class="badge"><%= percentage.single %>%</span>Single
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.inArelationship %></span>
-              <span class="badge"><%= percentage.inArelationship %>%</span>In a Relationship
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.engaged %></span>
-              <span class="badge"><%= percentage.engaged %>%</span>Engaged
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.married %></span>
-              <span class="badge"><%= percentage.married %>%</span>Married
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.civilUnion %></span>
-              <span class="badge"><%= percentage.civilUnion %>%</span>In a civil Union
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.domesticPartnership %></span>
-              <span class="badge"><%= percentage.domesticPartnership %>%</span>In a domestic partnership
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.openRelationship %></span>
-              <span class="badge"><%= percentage.openRelationship %>%</span>In an open relationship
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.complicated %></span>
-              <span class="badge"><%= percentage.complicated %>%</span>Its complicated
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.separated %></span>
-              <span class="badge"><%= percentage.separated %>%</span>Separated
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.divorced %></span>
-              <span class="badge"><%= percentage.divorced %>%</span>Divorced
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.widowed %></span>
-              <span class="badge"><%= percentage.widowed %>%</span>Widowed
-            </li>
+            <% _.each(relationshipStatus, function(value, key){ %>
+              <li class="list-group-item">
+                <span class="badge"><%= value[0] %></span>
+                <span class="badge"><%= value[1] %>%</span> <%= key %>
+              </li>
+            <% }); %>
           </ul>
         </div>
       </div>
