@@ -10,6 +10,26 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
+    <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">FaceDash</a>
+        </div>
+      
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/auth/facebook">Refresh</a></li>
+            <li><a href="/#/profile">Profile</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </nav>
     <div class="container">
       <div class="page"></div>
     </div>
@@ -26,12 +46,7 @@
     
 
     <!-- User View Template-->
-    <script type="text/template" id="user-content">      
-      <div class="page-header">
-        <h1>Facedash</h1>
-        <p class="lead">Start Analysing your Data Here<a class="pull-right btn btn-primary" href="/auth/facebook">Refresh</a><a class="pull-right btn btn-primary" href="/#/profile">Profile</a></p>
-      </div>
-
+    <script type="text/template" id="user-content">
       <div class="row">
         <div class="col-md-6">
           <h3>Friends Count</h3>
@@ -74,20 +89,12 @@
           <canvas height="300" id="myChart" style="width: 300px; height: 300px;" width="300"></canvas>
 
           <ul class="list-group">
-            <li class="list-group-item">
-              <span class="badge"><%= counts.male %></span>
-              <span class="badge"><%= percentage.male %>%</span>Male Count
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.female %></span>
-              <span class="badge"><%= percentage.female %>%</span>Female Count
-            </li>
-
-            <li class="list-group-item">
-              <span class="badge"><%= counts.otherGender %></span>
-              <span class="badge"><%= percentage.otherGender %>%</span>Other Count
-            </li>
+            <% _.each(genders, function(key, value){ %>
+              <li class="list-group-item">
+                <span class="badge"><%= key[0] %></span>
+                <span class="badge"><%= key[1] %>%</span><%= value %> Count
+              </li>
+            <% }); %>
           </ul>
         </div>
 
@@ -95,10 +102,10 @@
           <h3>Relationship Status<span class="label label-default"><%= accuracy.friendsRstatus %>%</span></h3>
 
           <ul class="list-group">
-            <% _.each(relationshipStatus, function(value, key){ %>
+            <% _.each(relationshipStatus, function(key, value){ %>
               <li class="list-group-item">
-                <span class="badge"><%= value[0] %></span>
-                <span class="badge"><%= value[1] %>%</span> <%= key %>
+                <span class="badge"><%= key[0] %></span>
+                <span class="badge"><%= key[1] %>%</span> <%= value %>
               </li>
             <% }); %>
           </ul>

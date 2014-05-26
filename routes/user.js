@@ -7,13 +7,13 @@ var graph = require('fbgraph');
 /* GET users listing. */
 exports.info = function(req, res) {
   
-  var information  = {};
+  var user  = {
+    location: null,
+    hometown: null,
+    friendsCount: null
+  };
 
-  var userLocation = null;
-  var userHometown = null;
-  var userLocationName = null;
-  var userHometownName = null;
-  var friendsCount = null;
+  var infoRequired = '/me/friends?fields=id,name,birthday,hometown,location,education,gender,interested_in,relationship_status,timezone,languages';
 
   // Percentage function
   var percentage = function(value1, value2){
@@ -23,33 +23,30 @@ exports.info = function(req, res) {
   graph.get('/me/', function(err, data) {
     // console.log('User Data:',data);
     // console.log('User Data:',data.location);
-    userHometown = _.values(data.hometown)[1];
-    userLocation = _.values(data.location)[1];
+    user.hometown = _.values(data.hometown)[1];
+    user.location = _.values(data.location)[1];
   });
 
-  // graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender', function(err, data) {
-  graph.get('/me/friends?fields=id,name,birthday,hometown,location,education,gender,interested_in,relationship_status,timezone,languages', function(err, data) {
+  graph.get(infoRequired, function(err, data) {
     // console.log('\n\n\nFromOutside:',data);
     
     // console.log(data.data);
-    var friendsIds = _.pluck(data.data, 'id');
-    var friendsCount = friendsIds.length;
-    console.log('FriendsCount:',friendsCount);
-
-    // friends Count
-    // friendsCount = results.length;
-    // console.log('Count:', friendsCount);
+    // var friendsIds = _.pluck(data.data, 'id');
+    user.friendsCount = _.pluck(data.data, 'id');
+    console.log('FriendsCount:',user.friendsCount);
 
     // Gender Count returns an object {female: ??, male: ??}
-    var genderCount = _.countBy(data.data, function(item) {
+    var genders = _.countBy(data.data, function(item) {
       return item.gender === 'male' ? 'male': 'female';
     });
 
-    genderCount.other = friendsCount - (genderCount.male + genderCount.female);
+    genders.male = [genders.male];
+    genders.female = [genders.female];
+    genders.other = [user.friendsCount.length - genders.male[0] - genders.female[0]];
 
-    var otherGenderPerc = Math.floor((genderCount.other/friendsCount)*100);
-    var malePerc = Math.floor((genderCount.male/friendsCount)*100);
-    var femalePerc = 100 - malePerc - otherGenderPerc;
+    genders.male.push(percentage(genders.male[0],user.friendsCount));
+    genders.other.push(percentage(genders.other[0],user.friendsCount));
+    genders.female.push(100 - genders.male[1] - genders.other[1]);
 
     /////////////////////////////////////////////////////////////////////////////
     
@@ -72,23 +69,15 @@ exports.info = function(req, res) {
     var year = new Date().getFullYear();
 
     var averageAge = year - Math.floor(cleanBdaysAvg / cleanBdays.length);
-    var averageAgeAccuracy = Math.floor((cleanBdays.length / friendsCount) * 100);
-
-    // console.log('averageAge:', averageAge);
-    // console.log('Accuracy age:', averageAgeAccuracy + '%');
-    
+    var averageAgeAccuracy = percentage(cleanBdays.length, user.friendsCount);
 
     /////////////////////////////////////////////////////////////////////////////
 
     var friendsLocations = _.chain(data.data).pluck('location').compact().value();
-    var friendsLocationsCount = friendsLocations.length;
     
-    var sameLocation = _.filter(friendsLocations, function(city){return city['name'] === userLocation});
-    // console.log('sameLocation:',sameLocation);
-
-    var sameLocationCount = sameLocation.length;
-    var sameLocationPerc = percentage(sameLocationCount,friendsLocations);
-    var sameLocationAccuracy = Math.floor((friendsLocationsCount/friendsCount)*100);
+    var sameLocation = _.filter(friendsLocations, function(city){return city['name'] === user.location});
+    var sameLocationPerc = percentage(sameLocation.length,friendsLocations);
+    var sameLocationAccuracy = percentage(friendsLocations.length,user.friendsCount);
 
     // console.log(sameLocation);
     console.log('same Location Perc:', sameLocationPerc);
@@ -97,14 +86,10 @@ exports.info = function(req, res) {
     /////////////////////////////////////////////////////////////////////////////
 
     var friendsHometowns = _.chain(data.data).pluck('hometown').compact().value();
-    var friendsHometownsCount = friendsHometowns.length;
 
-    var sameHometown = _.filter(friendsHometowns, function(city){return city['name'] === userHometown});
-    // var sameHometown = _.where(friendsHometowns, userHometown);
-
-    var sameHometownCount = sameHometown.length;
-    var sameHometownPerc = percentage(sameHometownCount,friendsHometowns);
-    var sameHometownAccuracy = Math.floor((friendsHometownsCount/friendsCount)*100);
+    var sameHometown = _.filter(friendsHometowns, function(city){return city['name'] === user.hometown});
+    var sameHometownPerc = percentage(sameHometown.length,friendsHometowns);
+    var sameHometownAccuracy = percentage(friendsHometowns.length,user.friendsCount);
 
     console.log('same Hometown Perc:',sameHometownPerc);
     console.log('sameHometown Accuracy:',sameHometownAccuracy);
@@ -127,32 +112,23 @@ exports.info = function(req, res) {
     console.log(relationshipStatus);
     
     var friendsRstatusCount = friendsRstatus.length;
-    var friendsRstatusAccuracy = Math.floor((friendsRstatusCount/friendsCount) * 100);
-    // console.log('friendsCount: ',friendsCount);
-    // console.log('friendsRstatusCount: ',friendsRstatusCount);
-    // console.log('friendsRstatusAccuracy: ',friendsRstatusAccuracy);
-    
-    // res.render('user', { friendsCount: friendsCount, userLocationName: userLocationName, userHometownName: userHometownName, otherGenderCount: otherGenderCount, otherGenderPerc: otherGenderPerc, maleCount: genderCount.male, malePerc: malePerc, femaleCount: genderCount.female, femalePerc: femalePerc, averageAge: averageAge, averageAgeAccuracy: averageAgeAccuracy, sameLocationCount: sameLocationCount,sameLocationPerc: sameLocationPerc, sameLocationAccuracy: sameLocationAccuracy, sameHometownCount: sameHometownCount,sameHometownPerc: sameHometownPerc, sameHometownAccuracy: sameHometownAccuracy, single: single, inArelationship: inArelationship, engaged: engaged, married: married, civilUnion: civilUnion, domesticPartnership: domesticPartnership, openRelationship: openRelationship, complicated: complicated, separated: separated, divorced: divorced, widowed: widowed, singlePerc: singlePerc, inArelationshipPerc: inArelationshipPerc, engagedPerc: engagedPerc, marriedPerc: marriedPerc, civilUnionPerc: civilUnionPerc, domesticPartnershipPerc: domesticPartnershipPerc, openRelationshipPerc: openRelationshipPerc, complicatedPerc: complicatedPerc, separatedPerc: separatedPerc, divorcedPerc: divorcedPerc, widowedPerc: widowedPerc, friendsRstatusAccuracy: friendsRstatusAccuracy});
+    var friendsRstatusAccuracy = percentage(friendsRstatusCount,user.friendsCount);
+
     res.send({  information: {
-                  friendsNumber: friendsCount,
-                  location: userLocation,
-                  hometown: userHometown,
+                  friendsNumber: user.friendsCount.length,
+                  location: user.location,
+                  hometown: user.hometown,
                   averageAge: averageAge
                 },
                 
                 relationshipStatus : relationshipStatus,
+                genders: genders,
 
                 counts: {
-                  otherGender: genderCount.other,
-                  male: genderCount.male,
-                  female: genderCount.female,
-                  sameLocation: sameLocationCount,
-                  sameHometown: sameHometownCount
+                  sameLocation: sameLocation.length,
+                  sameHometown: sameHometown.length
                 },
                 percentage: {
-                  otherGender: otherGenderPerc,
-                  male: malePerc,
-                  female: femalePerc,
                   sameLocation: sameLocationPerc,
                   sameHometown: sameHometownPerc
                 },
