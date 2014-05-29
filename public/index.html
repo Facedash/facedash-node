@@ -54,30 +54,30 @@
         </div>
 
         <div class="col-md-6">
-          <h3>Average Age<span class="label label-default"><%= accuracy.averageAge %>%</span></h3>
-          <p class="big"><%= information.averageAge %></p>
+          <h3>Average Age<span class="label label-default"><%= averageAge.accuracy %>%</span></h3>
+          <p class="big"><%= averageAge.avgAge %></p>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6">
-          <h3>Location<span class="label label-default"><%= accuracy.sameLocation %>%</span></h3>
+          <h3>Location<span class="label label-default"><%= location.accuracy %>%</span></h3>
 
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="badge"><%= counts.sameLocation %></span>
-              <span class="badge"><%= percentage.sameLocation %>%</span><%= information.location %>
+              <span class="badge"><%= location.count %></span>
+              <span class="badge"><%= location.percentage %>%</span><%= information.location %>
             </li>
           </ul>
         </div>
 
         <div class="col-md-6">
-          <h3>Hometown<span class="label label-default"><%= accuracy.sameHometown %>%</span></h3>
+          <h3>Hometown<span class="label label-default"><%= hometown.accuracy %>%</span></h3>
 
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="badge"><%= counts.sameHometown %></span>
-              <span class="badge"><%= percentage.sameHometown %>%</span><%= information.hometown %>
+              <span class="badge"><%= hometown.count %></span>
+              <span class="badge"><%= hometown.percentage %>%</span><%= information.hometown %>
             </li>
           </ul>
         </div>
@@ -89,20 +89,26 @@
           <canvas height="300" id="myChart" style="width: 300px; height: 300px;" width="300"></canvas>
 
           <ul class="list-group">
-            <% _.each(genders, function(key, value){ %>
+            <% _.each(gender.breakdown, function(key, value){ %>
               <li class="list-group-item">
                 <span class="badge"><%= key[0] %></span>
-                <span class="badge"><%= key[1] %>%</span><%= value %> Count
+                <span class="badge"><%= key[1] %>%</span><%= value %>
               </li>
             <% }); %>
           </ul>
         </div>
+        <script>
+          // var ctx = document.getElementById("myChart").getContext("2d");
+          // var data = [{value: 102,color:"rgba(255, 255, 255, 0.1)",strokeColor : "rgba(151,187,205,0)"},{value : 125,color : "rgba(255, 255, 255, 0.3)"}];
+          // new Chart(ctx).Doughnut(data);
+          // Doughnut.defaults = {segmentShowStroke : false };
+        </script>
 
         <div class="col-md-6">
-          <h3>Relationship Status<span class="label label-default"><%= accuracy.friendsRstatus %>%</span></h3>
+          <h3>Relationship Status<span class="label label-default"><%= relationshipStatus.accuracy %>%</span></h3>
 
           <ul class="list-group">
-            <% _.each(relationshipStatus, function(key, value){ %>
+            <% _.each(relationshipStatus.breakdown, function(key, value){ %>
               <li class="list-group-item">
                 <span class="badge"><%= key[0] %></span>
                 <span class="badge"><%= key[1] %>%</span> <%= value %>

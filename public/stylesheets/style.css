@@ -3,9 +3,10 @@ body{
 }
 
 .big{
-  font-size: 70px;
+  font-size: 90px;
   text-align: center;
-  color: #222222;
+  color: rgba(255, 255, 255, 0.3);
+  text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
   font-weight: bold;
 }
 
