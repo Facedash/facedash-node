@@ -20,8 +20,6 @@ exports.info = function(req, res) {
     relative_url: infoRequired // Get the first 50 friends of the current user
   }],
   function(err, data) {
-    console.log('this is the batch result 0', data[0].body);
-    console.log('this is the batch result 1', data[1].body);
     var data0 = JSON.parse(data[0].body);
     var data1 = JSON.parse(data[1].body);
 
