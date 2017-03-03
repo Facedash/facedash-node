@@ -8,8 +8,6 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// var underscore = require('underscore');
-// added the fbGraph module here
 var graph = require('fbgraph');
 
 
@@ -18,9 +16,10 @@ var graph = require('fbgraph');
 var conf = {
     client_id:      process.env.APP_ID || 'YOUR-APP-ID',
     client_secret:  process.env.APP_SECRET || 'YOUR-APP-SECRET',
-    scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists,user_relationships',
+    //old non working scopes below
+    //scope:          'email, user_about_me, friends_about_me, user_birthday, friends_birthday, user_education_history, friends_education_history, user_hometown, friends_hometown, user_interests, friends_interests, user_likes, friends_likes, user_location, friends_location, user_photos, friends_photos, user_relationships, friends_relationships, user_relationship_details, friends_relationship_details, user_work_history, friends_work_history, read_friendlists, user_relationships',
+    scope:          'email,user_about_me,user_education_history,user_birthday,user_hometown,user_interests,user_likes,user_location,user_photos,user_relationships,user_relationship_details,user_work_history,user_relationships,read_friendlists,user_friends',
     redirect_uri:   'http://localhost:3000/auth/facebook'
-    // redirect_uri:   'http://'YOUR PRODUCTION URL'/auth/facebook'
 };
 
 var routes = require('./routes');
@@ -122,7 +121,7 @@ app.use(function(err, req, res, next) {
 app.set('port', process.env.PORT || 3000);
 
 var server = app.listen(app.get('port'), function() {
-    console.log('Express server listening on port ' + server.address().port)
+    console.log('Express server listening on port ' + server.address().port);
 });
 
 module.exports = app;
